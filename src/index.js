@@ -16,8 +16,7 @@ let observableNames = rx.observable.fromArray(nomes)
   .map((data) => {
     return data = data + '!'
   })
-
-/*observableNames
+observableNames
   .subscribe(
     rx.observer({
       onNext: (val) => {
@@ -43,8 +42,8 @@ let observableNames = rx.observable.fromArray(nomes)
       onCompleted: () => {
         console.log('Observer 3 - COMPLETE')
       }
-    }))*/
-
+    }))
+/*
 let connectable = observableNames.publish()
 
 setTimeout(function () {
@@ -73,4 +72,4 @@ setTimeout(function () {
 
   }, 3000)
 
-}, 3000)
+}, 3000)*/

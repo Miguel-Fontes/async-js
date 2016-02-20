@@ -2,35 +2,19 @@
 const observable = require('./observable')
 const observer = require('./observer')
 const connectable = require('./connectable-observable')
+const arrStream = require ('./arr-stream')
 
 let rxtools = () => {
   let that = {}
 
   that.observable = {
-    // Create tem que receber na realidade uma funçao
-    // com os steps para criação do stream
-    // Na realidade, todo stream é uma função.
-    // As helper functions transformam os streams em funções
-
-    // Example:
-    /*
-     var source = Rx.Observable.create(function (observer) {
-      // Yield a single value and complete
-      observer.onNext(42)
-      observer.onCompleted()
-
-      // Any cleanup logic might go here
-      return function () {
-        console.log('disposed')
-      }
-    });*/
-
     create: (stream) => {
       return observable(stream)
     },
 
     fromArray: (arr) => {
-      return observable({ stream: arr })
+      // Deverá wrappar o array em uma function.
+      return observable({ stream: arrStream(arr) })
     }
   }
 

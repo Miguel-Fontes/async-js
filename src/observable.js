@@ -12,7 +12,7 @@ let observable = (spec, my) => {
   my.stream = spec.stream || {}
 
   that.map = f => {
-    return rx.observable.create({stream: my.stream.map(f)}, my)
+    return my.stream.map(f)
   }
 
   that.do = f => {
@@ -20,13 +20,9 @@ let observable = (spec, my) => {
   }
 
   that.subscribe = (observer) => {
-    // Reolver o stream e passar os valores para os observers
-    my.stream.forEach(value => {
-      observer.onNext(value)
-    })
-
+    // Reolver o stream e passar os valores para os observers/**/
+    my.stream.resolve(observer)
     observer.onCompleted()
-
     return that
   }
 
