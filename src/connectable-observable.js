@@ -1,4 +1,4 @@
-let connectable = (spec, my) => {
+let connectable = function connectable (spec, my) {
   const rx = require('./rx-tools')
   const extend = require('./utils').extend
   const is = require('./utils').is
@@ -16,22 +16,24 @@ let connectable = (spec, my) => {
   that = extend(that, observable(spec, my))
 
   that.connect = () => {
-    my.stream.forEach(value => {
-      that.notify(observer => {
-        observer.onNext(value)
-      })
-    })
-
-   that.notify(observer => {
-      observer.onCompleted()
-    })
+    my.stream.resolve(rx.observer({
+      onNext: (x) => {
+        my.observers.forEach((observer) => {
+          observer.onNext(x)
+        })
+      },
+      onCompleted: () => {
+        my.observers.forEach((observer) => {
+          observer.onCompleted()
+        })
+      },
+      onError: (err) => {
+        my.observers.forEach((observer) => {
+          observer.onError(err)
+        })
+      }
+    }))
     return that
-  }
-
-  that.notify = (cb) => {
-    my.observers.forEach((observer) => {
-      cb(observer)
-    })
   }
 
   that.subscribe = (observer => {
