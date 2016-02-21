@@ -43,7 +43,7 @@ observableNames
         console.log('Observer 3 - COMPLETE')
       }
     }))
-/*
+
 let connectable = observableNames.publish()
 
 setTimeout(function () {
@@ -72,4 +72,4 @@ setTimeout(function () {
 
   }, 3000)
 
-}, 3000)*/
+}, 3000)

@@ -2,7 +2,7 @@
 const observable = require('./observable')
 const observer = require('./observer')
 const connectable = require('./connectable-observable')
-const arrStream = require ('./arr-stream')
+const arrStream = require('./arr-stream')
 
 let rxtools = () => {
   let that = {}
@@ -13,7 +13,6 @@ let rxtools = () => {
     },
 
     fromArray: (arr) => {
-      // Deverá wrappar o array em uma function.
       return observable({ stream: arrStream(arr) })
     }
   }
@@ -24,7 +23,7 @@ let rxtools = () => {
     },
 
     fromArray: (arr) => {
-      return connectable({ stream: arr })
+      return connectable({ stream: arrStream(arr) })
     }
   }
 

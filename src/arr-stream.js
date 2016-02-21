@@ -1,7 +1,7 @@
 'use strict'
 let arrStream = function ArrStream (arr) {
   const rx = require('./rx-tools')
-  
+
   let that = {}
 
   that.resolve = (observer) => {
@@ -11,7 +11,6 @@ let arrStream = function ArrStream (arr) {
   }
 
   that.map = (f) => {
-    console.log(rx)
     return rx.observable.fromArray(
       arr.map(x => {
         return f(x)
