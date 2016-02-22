@@ -1,3 +1,4 @@
+'use strict'
 let promise = (spec, my) => {
   let that = {}
 
