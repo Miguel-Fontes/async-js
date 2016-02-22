@@ -27,8 +27,6 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "jquery": "^2.2.0",
-    "request-promise": "^2.0.1",
     "rx": "^4.0.8",
     "rx-node": "^1.0.2"
   }

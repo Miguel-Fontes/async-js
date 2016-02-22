@@ -6,8 +6,7 @@ const pr = require('./promise')()
 let nomes = ['Miguel Fontes',
   'Bruna Marques',
   'Guilherme Fontes',
-  'Allan Coelho',
-  'Jefferson',
+  'Jubileu :P',
   'Mauricio Fontes',
   'Maria Gorete']
 
@@ -16,8 +15,7 @@ let observableNames = rx.observable.fromArray(nomes)
   .map((data) => {
     return data = data + '!'
   })
-
-/*observableNames
+observableNames
   .subscribe(
     rx.observer({
       onNext: (val) => {
@@ -43,34 +41,58 @@ let observableNames = rx.observable.fromArray(nomes)
       onCompleted: () => {
         console.log('Observer 3 - COMPLETE')
       }
-    }))*/
+    }))
 
-let connectable = observableNames.publish()
+let pubObservable = observableNames.publish()
+
+pubObservable
+  .subscribe(
+    rx.observer({
+      onNext: (val) => {
+        console.log('HOT Observer 10000 - Observes', val)
+      },
+      onCompleted: () => {
+        console.log('HOT Observer 10000 - COMPLETE')
+    }}))
+
+pubObservable.connect()
+
+let connectable = rx.connectable.create(numbersStream)
+
+let i = 0;
+
+function numbersStream (observer) {
+   setTimeout(function () {
+      observer.onNext(i)
+      i++;
+      if (i < 15) {
+         numbersStream(observer);
+      }
+   }, 1000)
+}
+
+
+connectable
+  .subscribe(
+    rx.observer({
+      onNext: (val) => {
+        console.log('HOT Observer 1 - Observes', val)
+      },
+      onCompleted: () => {
+        console.log('HOT Observer 1 - COMPLETE')
+    }}))
+
+connectable.connect()
 
 setTimeout(function () {
   connectable
     .subscribe(
       rx.observer({
         onNext: (val) => {
-          console.log('HOT Observer 1 - Observes', val)
+          console.log('HOT Observer 2 - Observes', val)
         },
         onCompleted: () => {
-          console.log('HOT Observer 1 - COMPLETE')
+          console.log('HOT Observer 2 - COMPLETE')
       }}))
 
-  connectable.connect()
-
-  setTimeout(function () {
-    connectable
-      .subscribe(
-        rx.observer({
-          onNext: (val) => {
-            console.log('HOT Observer 2 - Observes', val)
-          },
-          onCompleted: () => {
-            console.log('HOT Observer 2 - COMPLETE')
-        }}))
-
-  }, 3000)
-
-}, 3000)
+}, 5000)
