@@ -6,8 +6,7 @@ const pr = require('./promise')()
 let nomes = ['Miguel Fontes',
   'Bruna Marques',
   'Guilherme Fontes',
-  'Allan Coelho',
-  'Jefferson',
+  'Jubileu :P',
   'Mauricio Fontes',
   'Maria Gorete']
 
@@ -58,16 +57,20 @@ pubObservable
 
 pubObservable.connect()
 
-let connectable = rx.connectable.create((observer) => {
-  let i = 0
-  while (i <= 50) {
-    let x = i
-    setTimeout(function () {
-      observer.onNext(x)
-    }, 2000)
-    i += 1
-  }
-})
+let connectable = rx.connectable.create(numbersStream)
+
+let i = 0;                     //  set your counter to 1
+
+function numbersStream (observer) {           //  create a loop function
+   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+      observer.onNext(i)          //  your code here
+      i++;                     //  increment the counter
+      if (i < 15) {            //  if the counter < 10, call the loop function
+         numbersStream(observer);             //  ..  again which will trigger another
+      }                        //  ..  setTimeout()
+   }, 1000)
+}
+
 
 connectable
   .subscribe(
@@ -92,4 +95,4 @@ setTimeout(function () {
           console.log('HOT Observer 2 - COMPLETE')
       }}))
 
-}, 3000)
+}, 5000)
