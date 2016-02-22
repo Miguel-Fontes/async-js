@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha .\\tests\\**\\*.js",
+    "test:w": "mocha -w .\\tests\\**\\*.js",
     "index": "node .\\dist\\index.js",
-    "babel": "babel --presets es2015 -d dist src",
-    "babel:w": "babel -w --presets es2015 -d dist src",
-    "build": "babel --presets es2015 -d dist src",
+    "babel": "babel --presets es2015 src -d dist",
+    "babel:w": "babel -w --presets es2015 src -d dist",
+    "build": "babel --presets es2015 src -d dist",
     "lite": "lite-server",
     "start": "concurrent \"npm run index\" \"npm run babel\"",
     "watch": "watchify .\\src\\index.js -o \"npm run babel & npm run index\""
