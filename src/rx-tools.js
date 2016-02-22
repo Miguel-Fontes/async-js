@@ -22,11 +22,9 @@ let rxtools = () => {
 
   that.connectable = {
     create: (config, priv) => {
-      let extConfig
-
       // O extend garante que o cliente possa passar uma função ou um objeto
       // de configuração já formado
-      extConfig = extend({}, {stream: stream({resolve: config})} , config)
+      let extConfig = extend({}, {stream: stream({resolve: config})} , config)
 
       return connectable(extConfig, priv)
     },
