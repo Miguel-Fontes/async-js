@@ -12,4 +12,21 @@ describe('Promise suite', function () {
       done()
     })
   })
+  describe('Then', function () {
+    it('should call onFulfilled Function when fulfilled', function (done) {
+      promise().then(function onFulfilled () {
+        done()
+      })
+    })
+    it('should call onRejected Function when rejected', function (done) {
+      promise().then(function onFulfilled () {}, function onRejected () {
+        done()
+      })
+    })
+    it('should return a promise', function (done) {
+      expect(promise().then().then).not.to.be.undefined
+      expect(promise().then().catch).not.to.be.undefined
+      done()
+    })
+  })
 })
