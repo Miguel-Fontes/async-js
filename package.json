@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha .\\tests\\**\\*.js",
-    "test:w": "mocha -w .\\tests\\**\\*.js",
+    "test": "mocha --compilers js:babel-core/register .\\tests\\**\\*.js",
+    "test:w": "mocha -w --compilers js:babel-core/register .\\tests\\**\\*.js",
     "index": "node .\\dist\\index.js",
     "babel": "babel --presets es2015 src -d dist",
     "babel:w": "babel -w --presets es2015 src -d dist",
