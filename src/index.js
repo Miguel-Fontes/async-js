@@ -16,8 +16,7 @@ let observableNames = rx.observable.fromArray(nomes)
   .map((data) => {
     return data = data + '!'
   })
-
-/*observableNames
+observableNames
   .subscribe(
     rx.observer({
       onNext: (val) => {
@@ -43,34 +42,54 @@ let observableNames = rx.observable.fromArray(nomes)
       onCompleted: () => {
         console.log('Observer 3 - COMPLETE')
       }
-    }))*/
+    }))
 
-let connectable = observableNames.publish()
+let pubObservable = observableNames.publish()
+
+pubObservable
+  .subscribe(
+    rx.observer({
+      onNext: (val) => {
+        console.log('HOT Observer 10000 - Observes', val)
+      },
+      onCompleted: () => {
+        console.log('HOT Observer 10000 - COMPLETE')
+    }}))
+
+pubObservable.connect()
+
+let connectable = rx.connectable.create((observer) => {
+  let i = 0
+  while (i <= 50) {
+    let x = i
+    setTimeout(function () {
+      observer.onNext(x)
+    }, 2000)
+    i += 1
+  }
+})
+
+connectable
+  .subscribe(
+    rx.observer({
+      onNext: (val) => {
+        console.log('HOT Observer 1 - Observes', val)
+      },
+      onCompleted: () => {
+        console.log('HOT Observer 1 - COMPLETE')
+    }}))
+
+connectable.connect()
 
 setTimeout(function () {
   connectable
     .subscribe(
       rx.observer({
         onNext: (val) => {
-          console.log('HOT Observer 1 - Observes', val)
+          console.log('HOT Observer 2 - Observes', val)
         },
         onCompleted: () => {
-          console.log('HOT Observer 1 - COMPLETE')
+          console.log('HOT Observer 2 - COMPLETE')
       }}))
-
-  connectable.connect()
-
-  setTimeout(function () {
-    connectable
-      .subscribe(
-        rx.observer({
-          onNext: (val) => {
-            console.log('HOT Observer 2 - Observes', val)
-          },
-          onCompleted: () => {
-            console.log('HOT Observer 2 - COMPLETE')
-        }}))
-
-  }, 3000)
 
 }, 3000)
