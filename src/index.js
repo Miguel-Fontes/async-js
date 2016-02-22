@@ -59,15 +59,15 @@ pubObservable.connect()
 
 let connectable = rx.connectable.create(numbersStream)
 
-let i = 0;                     //  set your counter to 1
+let i = 0;
 
-function numbersStream (observer) {           //  create a loop function
-   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-      observer.onNext(i)          //  your code here
-      i++;                     //  increment the counter
-      if (i < 15) {            //  if the counter < 10, call the loop function
-         numbersStream(observer);             //  ..  again which will trigger another
-      }                        //  ..  setTimeout()
+function numbersStream (observer) {
+   setTimeout(function () {
+      observer.onNext(i)
+      i++;
+      if (i < 15) {
+         numbersStream(observer);
+      }
    }, 1000)
 }
 
