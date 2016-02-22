@@ -1,6 +1,5 @@
 'use strict'
 let observable = (spec, my) => {
-  const is = require('./utils').is
   const rx = require('./rx-tools')
 
   let that = {}

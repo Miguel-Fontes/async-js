@@ -16,6 +16,7 @@ let connectable = function connectable (spec, my) {
   that = extend(that, observable(spec, my))
 
   that.connect = () => {
+
     my.stream.resolve(rx.observer({
       onNext: (x) => {
         my.observers.forEach((observer) => {
