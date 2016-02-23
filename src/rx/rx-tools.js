@@ -4,8 +4,8 @@ const observer = require('./observer')
 const connectable = require('./connectable-observable')
 const arrStream = require('./arr-stream')
 const stream = require('./stream')
-const extend = require('./../utils').extend
-const is = require('./../utils').is
+const extend = require('./../utils/utils').extend
+const is = require('./../utils/utils').is
 
 let rxtools = () => {
   let that = {}
