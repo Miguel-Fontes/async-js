@@ -1,4 +1,4 @@
-const thenable = require('./../src/promises/thenable')
+const thenable = require('./../../src/promises/thenable')
 const expect = require('chai').expect
 
 describe('Thenable Suite', function () {

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const Promise = require('./../src/promises/promise')
+const Promise = require('./../../src/promises/promise')
 
 describe('Promise suite', function () {
   describe('Constructor API', function () {
