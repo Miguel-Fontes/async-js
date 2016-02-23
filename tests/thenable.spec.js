@@ -43,15 +43,19 @@ describe('Thenable Suite', function () {
         })
     })
 
+    //then must return a promise [3.3].
     it('should return a Promise' , function (done) {
-      
+      let myThenable = thenable(function (resolve, reject) {
+        resolve('done')
+      }).then((data) => {
+        data
+      })
+
+      expect(myThenable.then).not.to.be.undefined
+      expect(myThenable.catch).not.to.be.undefined
+
       done()
     })
-  })
-  describe.skip('Thenable Resolution', function () {
-    it('should resolve with a object')
-    it('should resolve with a thenable')
-    it('should reject with a object')
   })
 
 })

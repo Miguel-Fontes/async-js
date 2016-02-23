@@ -1,7 +1,8 @@
 'use strict'
 const is = require('./utils').is
-const thenable = require ('./thenable')
-let Promise = function Promise (spec, my) {
+const thenable = require('./thenable')
+
+let promise = function Promise (spec, my) {
   let that = {}
 
   spec = spec || {}
@@ -18,11 +19,14 @@ let Promise = function Promise (spec, my) {
   }
 
   that.create = (call) => {
-    // TODO: Refatorar
-    return that
+    // Call pode ser uma funcion (resolve: function, reject: function)
+    // Ou um valor (nesse caso, construo um obj spec e passo status já resolved)
+    let spec = is('Function', call) ? call : { data: call, status: 1 }
+
+    return thenable(spec)
   }
 
   return that
 }
 
-module.exports = Promise()
+module.exports = promise()

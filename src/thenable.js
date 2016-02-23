@@ -14,8 +14,8 @@ let thenable = function thenable (spec, my) {
 
   my.onFulfilled = spec.onFulfilled || []
   my.onRejected = spec.onRejected || []
-  my.data = {}
-  my.err = {}
+  my.data = spec.data || {}
+  my.err = spec.err || {}
 
   my.executor = is('Function', spec) ? spec : spec.executor || {}
   my.status = spec.status || states['pending']
@@ -24,8 +24,10 @@ let thenable = function thenable (spec, my) {
   that.then = then
   that.catch = catchErr
 
-  // Resolution
-  my.executor(resolve, reject)
+  // Resolution if is a function
+  if (is('Function', my.executor)) {
+    my.executor(resolve, reject)
+  }
 
   function reject (motivo) {
     my.err = motivo
@@ -44,29 +46,32 @@ let thenable = function thenable (spec, my) {
   }
 
   function then (onFulfilledCb, onRejectedCb) {
-    // Rolou
-    if (onFulfilledCb && my.status === states['fulfilled']) {
+    // If 1 - Foi informado um Callback(CB) + 2 - CB é uma Function + 3 - Thenable está fulfilled
+    if (onFulfilledCb && is('Function', onFulfilledCb) && my.status === states['fulfilled']) {
       onFulfilledCb(my.data)
     }
 
-    if (my.status === states['pending']) {
-      if (is('Function', onFulfilledCb)) { my.onFulfilled.push(onFulfilledCb) }
+    // if 1 - Thenable está pending + 2 - CB é uma Function
+    if (my.status === states['pending'] && is('Function', onFulfilledCb)) {
+      my.onFulfilled.push(onFulfilledCb)
     }
 
-    // Deu treta
+    // Tratamento para rejected
     catchErr(onRejectedCb)
 
-    return that
+    return thenable(my)
   }
 
   function catchErr (onRejectedCb) {
-    // Deu treta
-    if (onRejectedCb && my.status === states['rejected']) {
+    // If 1 - Foi informado um Callback(CB) + 2 - CB é uma Function + 3 - Thenable está rejected
+    if (onRejectedCb && is('Function', onRejectedCb) && my.status === states['rejected']) {
       onRejectedCb(my.err)
     }
 
-    if (is('Function', onRejectedCb)) { my.onRejected.push(onRejectedCb) }
-    return that
+    // if 1 - Thenable está pending + 2 - CB é uma Function
+    if (my.status === states['pending'] && is('Function', onRejectedCb)) {
+      my.onRejected.push(onRejectedCb)
+    }
   }
 
   return that

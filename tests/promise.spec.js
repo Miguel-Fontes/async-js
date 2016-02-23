@@ -17,8 +17,34 @@ describe('Promise suite', function () {
     })
   })
 
-  describe.skip('Construtor Resolution', function () {
-    it('should create with a function')
-    it('should create with a object')
+  describe('Construtor Resolution', function () {
+    it('should create with a function', function (done) {
+      let myMessage = 'Resolved'
+      let myPromise = Promise.create((resolve, reject) => {
+        resolve(myMessage.toString())
+      })
+
+      expect(myPromise.then).not.to.be.undefined
+      expect(myPromise.catch).not.to.be.undefined
+
+      myPromise.then(data => {
+        expect(data.toString()).to.be.equals(myMessage.toString())
+      })
+
+      done()
+    })
+    it('should create with a value', function (done) {
+      let myData = ['Value', 'Promise', 'Creation']
+      let myPromise = Promise.create(myData)
+
+      expect(myPromise.then).not.to.be.undefined
+      expect(myPromise.catch).not.to.be.undefined
+
+      myPromise.then(data => {
+        expect(data).to.be.equals(myData)
+      })
+
+      done()
+    })
   })
 })
