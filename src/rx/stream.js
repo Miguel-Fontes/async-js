@@ -1,3 +1,4 @@
+'use strict'
 let stream = function stream (spec, my) {
   let that = {}
 

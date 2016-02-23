@@ -1,5 +1,5 @@
 'use strict'
-const is = require('./utils').is
+const is = require('./../utils/utils').is
 
 let thenable = function thenable (spec, my) {
   let that = {},

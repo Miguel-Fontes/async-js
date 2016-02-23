@@ -1,5 +1,5 @@
 'use strict'
-const is = require('./utils').is
+const is = require('./../utils/utils').is
 const thenable = require('./thenable')
 
 let promise = function Promise (spec, my) {
