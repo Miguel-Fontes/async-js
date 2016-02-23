@@ -1,6 +1,6 @@
 'use strict'
 const is = require('./utils').is
-let promise = (spec, my) => {
+let Promise = function Promise (spec, my) {
   let that = {},
     states = {
       'pending': 0,
@@ -11,12 +11,12 @@ let promise = (spec, my) => {
   spec = spec || {}
   my = my || {}
 
+  my.data = is('Function', spec) ?
+    spec :
+    spec.data || {}
+
   my.onFulfilled = my.onFulfilled || []
   my.onRejected = my.onRejected || []
-
-  my.executor = is('Function', spec) ?
-    {executor: spec} :
-    spec.executor || {}
 
   my.status = my.status || 0
 
@@ -35,13 +35,8 @@ let promise = (spec, my) => {
     return that
   }
 
-  that.resolve = () => {
-
-    return that
-  }
-
-  that.create = (call) => {
-    let newPromise = promise(call)
+  that.resolve = (data) => {
+    let newPromise = Promise(data)
 
     newPromise.then = then
     newPromise.catch = catchErr
@@ -55,8 +50,13 @@ let promise = (spec, my) => {
     return newPromise
   }
 
+  that.create = (call) => {
+    return call(that.resolve, that.reject)
+  }
+
   function then (onFulfilledCb, onRejectedCb) {
-    if (is('Function', onFulfilledCb)) { my.onFulfilled.add(onFulfilledCb) }
+    console.log(my.data)
+    if (is('Function', onFulfilledCb)) { onFulfilledCb(my.data) }
     if (is('Function', onRejectedCb)) { my.onRejected.add(onRejectedCb) }
 
     /*// Rolou
@@ -76,4 +76,33 @@ let promise = (spec, my) => {
   return that
 }
 
-module.exports = promise()
+module.exports = Promise()
+
+function thenable (spec, my) {
+  let that = {}
+
+  spec = spec || {}
+  my = my || {}
+
+  my.onFulfilled = my.onFulfilled || []
+  my.onRejected = my.onRejected || []
+
+  function then (onFulfilledCb, onRejectedCb) {
+    if (is('Function', onFulfilledCb)) { my.onFulfilled.add(onFulfilledCb) }
+    if (is('Function', onRejectedCb)) { my.onRejected.add(onRejectedCb) }
+
+    /*// Rolou
+    if (onFulfilled && my.status === states['fulfilled']) onFulfilled()
+
+    // Deu treta
+    if (onRejected && my.status === states['rejected']) onRejected()*/
+
+    return that
+  }
+
+  function catchErr (onRejectedCb) {
+    if (is('Function', onRejectedCb)) { my.onRejected.add(onRejectedCb) }
+    return that
+  }
+
+}
