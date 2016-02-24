@@ -17,7 +17,7 @@ let thenable = function thenable (spec, my) {
   my.data = spec.data || {}
   my.err = spec.err || {}
 
-  my.executor = is('Function', spec) ? spec : spec.executor || {}
+  my.executor = is('Function', spec) ? spec : spec.executor || spec || {}
   my.status = spec.status || states['pending']
 
   // API
@@ -27,6 +27,8 @@ let thenable = function thenable (spec, my) {
   // Resolution if is a function
   if (is('Function', my.executor)) {
     my.executor(resolve, reject)
+  } else {
+    resolve(my.executor)
   }
 
   function reject (motivo) {

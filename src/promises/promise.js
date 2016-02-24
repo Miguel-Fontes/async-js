@@ -19,11 +19,8 @@ let promise = function Promise (spec, my) {
   }
 
   that.create = (call) => {
-    // Call pode ser uma funcion (resolve: function, reject: function)
-    // Ou um valor (nesse caso, construo um obj spec e passo status já resolved)
-    let spec = is('Function', call) ? call : { data: call, status: 1 }
-
-    return thenable(spec)
+    // Call pode ser uma funcion (resolve: function, reject: function) ou um valor
+    return thenable(call)
   }
 
   return that
