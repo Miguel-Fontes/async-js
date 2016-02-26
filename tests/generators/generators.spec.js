@@ -293,7 +293,7 @@ describe('Javascript Generators Suite', function () {
         }
 
         finally {
-          console.log('Finalizado!')
+          // good
         }
       }
 
@@ -308,5 +308,76 @@ describe('Javascript Generators Suite', function () {
 
       done()
     })
+
+    it('the integration of promises with generators is simply powerful', function (done) {
+      let it = myGenerator()
+      it.next()
+
+      function promiseBreeder () {
+        return new Promise((resolve, reject) => {
+          resolve(['Promise', 'Resolved'])
+        }).then((data) => {
+          // Vou adicionar um atraso para simular assincronicidade
+          setTimeout(function () {
+            it.next(data)
+          }, 300)
+        })
+      }
+
+      function* myGenerator () {
+        let data = yield promiseBreeder()
+        expect(data).to.deep.equal(['Promise', 'Resolved'])
+        done()
+      }
+
+    })
+
+    it("we can abstract the evolution (next's) of generators with async behavior and promises", function (done) {
+      function run (generator) {
+        let it = generator()
+
+        let res = it.next()
+
+        iterate(res)
+
+        function iterate (res) {
+          if (!res.done) {
+            res
+              .value
+              .then((data) => {
+                // Vou adicionar um atraso para simular assincronicidade
+                setTimeout(function () {
+                  res = it.next(data)
+                  iterate(res)
+                }, 80)
+              })
+          }
+        }
+      }
+
+      function stringPromiseBreeder (data) {
+        return new Promise((resolve, reject) => {
+          let seed = data || 0
+          resolve(seed + 1)
+        })
+      }
+
+      function* myGenerator () {
+        let data1 = yield stringPromiseBreeder()
+        let data2 = yield stringPromiseBreeder(data1)
+        let data3 = yield stringPromiseBreeder(data2)
+
+        expect(data1).to.be.equal(1)
+        expect(data2).to.be.equal(2)
+        expect(data3).to.be.equal(3)
+
+        done()
+
+      }
+
+      run(myGenerator)
+
+    })
+
   })
 })
