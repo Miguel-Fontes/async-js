@@ -4,8 +4,8 @@ const observer = require('./observer')
 const connectable = require('./connectable-observable')
 const arrStream = require('./arr-stream')
 const stream = require('./stream')
-const extend = require('./utils').extend
-const is = require('./utils').is
+const extend = require('./../utils/utils').extend
+const is = require('./../utils/utils').is
 
 let rxtools = () => {
   let that = {}
@@ -22,11 +22,9 @@ let rxtools = () => {
 
   that.connectable = {
     create: (config, priv) => {
-      let extConfig
-
       // O extend garante que o cliente possa passar uma função ou um objeto
       // de configuração já formado
-      extConfig = extend({}, {stream: stream({resolve: config})} , config)
+      let extConfig = extend({}, {stream: stream({resolve: config})} , config)
 
       return connectable(extConfig, priv)
     },

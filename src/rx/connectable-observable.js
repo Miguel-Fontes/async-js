@@ -1,7 +1,7 @@
 let connectable = function connectable (spec, my) {
   const rx = require('./rx-tools')
-  const extend = require('./utils').extend
-  const is = require('./utils').is
+  const extend = require('./../utils/utils').extend
+  const is = require('./../utils/utils').is
   const observable = require('./observable')
 
   let that = {}

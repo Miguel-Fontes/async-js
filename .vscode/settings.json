@@ -5,8 +5,8 @@
         "**/bower_components": true,
         "**/dist": true
     },
+
     "files.exclude": {
-        "**/dist": true,
         "**/.git": true,
         "**/.DS_Store": true
     }
