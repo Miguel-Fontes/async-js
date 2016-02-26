@@ -1,7 +1,7 @@
 require('babel-polyfill')
 const expect = require('chai').expect
-describe('Javascript Generators Suite', function () {
-  describe('Default Tests', function () {
+describe('Javascript Generators Suite (Default)', function () {
+  describe('Basic Tests', function () {
     it('should create a generator that returns 0, 1, 2, 3, 4, 5...', function (done) {
       function* foo () {
         let x = 0
