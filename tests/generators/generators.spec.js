@@ -238,50 +238,58 @@ describe('Javascript Generators Suite', function () {
       expect(it.next().value).to.be.equal(4)
       expect(it.next().value).to.be.equal(5)
 
-
       done()
     })
 
   })
   describe('Async with Generators', function () {
     const http = require('http')
-    const url = 'http://jsonplaceholder.typicode.com/todos'
-
-    // Helper function com especificação de request
-    function requestTodos (resolve, reject) {
-      http.get(url, (res) => {
-        res.body = ''
-        res.on('data', (chunk) => {
-          res.body += chunk.toString()
-        })
-
-        res.on('end', () => {
-          resolve(res.body)
-        })
-      })
-    }
-
-    // Get 100 Todos
+    const url = 'http://jsonplaceholder.typicode.com/users'
 
     it('we can use generators to model async requests', function (done) {
+      // PERIGO: Estou usando uma API pública para obter dados de teste e estou VALIDANDO os dados.
+      // Isso é suicídio, tá ligado? Mas o código ficou legal.
+      let usersArr = [
+        'Clementina DuBuque',
+        'Glenna Reichert',
+        'Nicholas Runolfsdottir V',
+        'Kurtis Weissnat',
+        'Mrs. Dennis Schulist',
+        'Chelsey Dietrich',
+        'Patricia Lebsack',
+        'Clementine Bauch',
+        'Ervin Howell',
+        'Leanne Graham'
+      ]
 
-      function run (generator) {
-          let it = asyncGen()
-          it.next()
-
-          let pr = new Promise(requestTodos)
-
-          pr.then((data) => {
-              it.next(data)
-              return data
+      function hRequestUsers () {
+        http.get(url, (res) => {
+          res.body = ''
+          res.on('data', (chunk) => {
+            res.body += chunk.toString()
           })
+
+          res.on('end', () => {
+            it.next(JSON.parse(res.body))
+          })
+        })
+
+        return 'ok'
       }
 
       function* asyncGen (request) {
         try {
-          let todos = yield
+          // Paro a execução no request e aguardo que o request me avise que fez o fetch dos dados (it.next())
+          let users = yield hRequestUsers()
 
-          yield todos
+          // Itero nos resultados
+          for (let user of users) {
+            let usr = usersArr.pop()
+            expect(user.name).to.be.equal(usr)
+          }
+
+        } catch(err) {
+          console.error(err)
         }
 
         finally {
@@ -289,7 +297,14 @@ describe('Javascript Generators Suite', function () {
         }
       }
 
-      let data = run(asyncGen)
+      try {
+        // Inicio o progrma
+        var it = asyncGen()
+        it.next()
+
+      } catch (err) {
+        console.error(err)
+      }
 
       done()
     })
